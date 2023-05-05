@@ -42,7 +42,7 @@ namespace FileManipulation
 
                     usersList.Add(user);
                  }
-
+                sr.Close();
             }
 
             foreach (var item in usersList)
@@ -53,6 +53,35 @@ namespace FileManipulation
                 }
             }
             #endregion 
+
+            filePath = "./export.txt";
+            using (StreamWriter sw = new StreamWriter(filePath))
+            {
+                sw.WriteLine($"{DateTime.Now.ToString()} - Date NON edu users were logged ");
+
+                foreach (var item in usersList)
+                {
+                    if (!item.Email.Contains(".edu"))
+                    {
+                        sw.WriteLine($"SUSPECT| \t Failed login: {item.Email}, {item.IpAddress}");
+                    }
+                }
+                
+            }
+           
+            using (StreamWriter sw = new StreamWriter(filePath, true))
+            {
+                sw.WriteLine($"{DateTime.Now.ToString()} - Date edu users were logged " );
+                sw.WriteLine("\t #### \t ##### \t #### \t ##### \t #### \t ##### \t #### \t #####");
+                foreach (User item in usersList)
+                {
+                    if (item.Email.Contains(".edu"))
+                    {
+                        sw.WriteLine($"{item.FirstName}, {item.Surname} has email: {item.Email}");
+                    }
+                }
+
+            }
 
 
 
