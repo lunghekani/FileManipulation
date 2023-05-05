@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO; // library that is going to be used to help us manage files
+using System.Runtime.InteropServices;
+
 namespace FileManipulation
 {
     internal class Program
@@ -13,9 +15,10 @@ namespace FileManipulation
             // . - one folder up
             // / - inside this folder
             // ~ - root directory
-            string filePath = "./MOCK_DATA.csv"; 
-
-            List<string> userInfo = new List<string>(); // creating a list to store all user info
+            string filePath = "./MOCK_DATA.csv";
+            #region Reading
+            //List<string> userInfo = new List<string>(); // creating a list to store all user info
+            List<User> usersList = new List<User>();    
             // StreamReader Class 
             using(StreamReader sr = new StreamReader(filePath))
             { // file is now open and ready to be read
@@ -26,23 +29,51 @@ namespace FileManipulation
                 {
                     string line = sr.ReadLine();
                     string[] arrUserInfo = line.Split(','); // splitting into an array
-                    userInfo.Add($"Name: {arrUserInfo[1]} surname: {arrUserInfo[2]} "); 
-                }
+
+                    var user = new User
+                    {
+                        Id = arrUserInfo[0],
+                        FirstName = arrUserInfo[1],
+                        Surname = arrUserInfo[2],
+                        Email = arrUserInfo[3],
+                        Gender = arrUserInfo[4],
+                        IpAddress = arrUserInfo[5],
+                    };
+
+                    usersList.Add(user);
+                 }
 
             }
 
-            foreach (var item in userInfo)
+            foreach (var item in usersList)
             {
-                Console.WriteLine(item);
+                if (item.Email.Contains(".edu"))
+                {
+                    Console.WriteLine($"{item.FirstName}, {item.Surname} has email: {item.Email}");
+                }
             }
+            #endregion 
+
+
+
 
 
 
             Console.ReadLine();
-            // reading from a file
-
-
-            // writing to a file 
+    
         }
+
+
+
+    }
+    class User
+    {
+     
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        public string Gender { get; set; }
+        public string IpAddress { get; set; }
     }
 }
